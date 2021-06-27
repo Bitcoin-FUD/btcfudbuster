@@ -22,7 +22,7 @@ Realm.open({
       realm.write(() => {
         realm.create('State', {
           id: 0,
-          sinceId: 1364622148971724802
+          sinceId: 1409236251304210399
         })
       })
     }
@@ -38,11 +38,16 @@ Realm.open({
 function run() {
   getLatestTweets()
     .then(async tweets => {
-      tweets
-        .filter(tweet => tweet.id > state[0].sinceId)
-        .forEach(tweet => {
-          sendTweet(tweet.id_str)
-        })
+      tweets = tweets.filter(tweet => tweet.id > state[0].sinceId)
+
+      for (let tweet in tweets) {
+        await sendTweet(tweet)
+      }
+
+      if (tweets.length === 0) {
+        console.log('No new mentions')
+        return
+      }
 
       realm.write(() => {
         realm.create('State', {
@@ -55,30 +60,36 @@ function run() {
 
 function getLatestTweets() {
   return new Promise(resolve => {
-    // TODO get latest mentions
-    // client.get('search/tweets', {}, function(error, tweets, response) {
-    //   resolve(tweets.statuses)
-    // })
+    console.log('Get latest mentions')
+    client.get('statuses/mentions_timeline.json', {since_id: state[0].sinceId}, function(error, tweets, response) {
+      resolve(tweets)
+    })
   })
 }
 
 /**
  * @description Method to send tweet
- * @param {Number} id status id
+ * @param {Object} tweet the tweet to reply to
  * @returns {Promise}
  */
-function sendTweet(id) {
+function sendTweet(tweet) {
   return new Promise(resolve => {
-    let tweet = ''
-    console.log('Tweet to', id)
+    let message = ''
+    let replyTo = tweet.user.screen_name
+    let theUserWhoHasToLearn = tweet.in_reply_to_screen_name
+    console.log('Tweet to', tweet.id)
 
-   
-    // TODO get username and username of person in reply to and right fudbusting links to share
-    tweet += ` @${username}`
+    message += `I'm still being built, so here is a curated collection for now endthefud.org`
 
+    // twitter requires to tag user in reply to, we also tag the user that is meant to read the fud busting
+    if (theUserWhoHasToLearn === replyTo) {
+      message += ` @${replyTo}`
+    } else {
+      message += ` @${theUserWhoHasToLearn} and @${replyTo}`
+    }
     client.post('statuses/update', {
-      status: tweet,
-      in_reply_to_status_id: id
+      status: message,
+      in_reply_to_status_id: tweet.id
     }, (error, tweet, response) => {
       if (error) {
         console.log(error)
