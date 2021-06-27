@@ -73,7 +73,7 @@ function sendTweet(id) {
     console.log('Tweet to', id)
 
    
-    // TODO get username and right fudbusting links to share
+    // TODO get username and username of person in reply to and right fudbusting links to share
     tweet += ` @${username}`
 
     client.post('statuses/update', {
