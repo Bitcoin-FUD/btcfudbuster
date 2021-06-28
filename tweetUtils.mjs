@@ -3,11 +3,23 @@ import Twitter from 'twitter'
 
 const client = new Twitter(config.twitterAPI)
 
-export const getLatestTweets = () => {
+export const getTweet = id => {
+  return new Promise(resolve => {
+    console.log('Get tweet', id)
+    client.get('statuses/show.json', {
+      id: id
+    }, (error, tweet, response) => {
+      // TODO handle error cases
+      resolve(tweet)
+    })
+  })
+}
+
+export const getLatestTweets = since_id => {
   return new Promise(resolve => {
     console.log('Get latest mentions')
     client.get('statuses/mentions_timeline.json', {
-      since_id: state[0].sinceId
+      since_id
     }, (error, tweets, response) => {
       // TODO handle error cases
       resolve(tweets)

@@ -15,8 +15,7 @@ import { getMostRelevantAnswer } from './answerUtils.mjs'
 
     let bestAnswer = getMostRelevantAnswer(query)
     if (bestAnswer) {
-      let url = random(bestAnswer.links)
-      let tweet = `${bestAnswer.answer} ${url} @guidinguser @noviceuser`
+      let tweet = `${bestAnswer} ${url} @guidinguser @noviceuser`
       console.log(tweet)
     } else {
       console.log('No results')

@@ -27,5 +27,9 @@ export const getMostRelevantAnswer = query => {
       Math.random() < .5 ? 1 : -1
     )
 
-  return answers.pop()
+  let mostRelevantAnswer = answers.pop()
+  if (!mostRelevantAnswer) return null
+
+  let url = random(mostRelevantAnswer.links)
+  return `${mostRelevantAnswer.answer} ${url}`
 }
