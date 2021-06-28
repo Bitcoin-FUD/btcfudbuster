@@ -11,10 +11,14 @@ Install nodeJS from https://nodejs.org/en/
 
 # Adding Articles
 
-You can fork this repository to add articles to the `articles/` folder.
+You can fork this repository to add articles to the `material/` folder.
 
-Each category has its own `.txt` file. Each link is a new line.
+## Data Structure
+The data format is JSON. Each entry contains the following fields:
 
+- tags: relevant tags to find relevant answers
+- answer: the pure answer text
+- links: the links that will be added to the answer. Multiple links are possible, the bot will chose a random link from the list.
 # Testing queries
 
 You can test queries by running
