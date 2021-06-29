@@ -15,7 +15,7 @@ import { getMostRelevantAnswer } from './answerUtils.mjs'
 
     let bestAnswer = getMostRelevantAnswer(query)
     if (bestAnswer) {
-      let tweet = `${bestAnswer} ${url} @guidinguser @noviceuser`
+      let tweet = `${bestAnswer} @guidinguser @noviceuser`
       console.log(tweet)
     } else {
       console.log('No results')

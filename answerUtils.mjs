@@ -1,4 +1,14 @@
-import environment from './material/environment.mjs'
+import toml from 'toml'
+import fs from 'fs'
+import glob from 'glob'
+import path from 'path'
+const __dirname = path.resolve()
+
+const allMaterial = glob.sync(__dirname + '/material/**/*.toml')
+  .map(path => fs.readFileSync(path, { encoding: 'utf-8'}))
+  .map(file => toml.parse(file))
+
+console.log(allMaterial)
 
 /**
  * @description Method to get random element from array
@@ -10,7 +20,7 @@ export const random = arr => {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 export const getMostRelevantAnswer = query => {
-  let answers = environment
+  let answers = allMaterial
     .map(material => {
       material.hits = query
         .split(' ')
