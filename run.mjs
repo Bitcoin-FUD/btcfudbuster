@@ -21,7 +21,7 @@ Realm.open({
       realm.write(() => {
         realm.create('State', {
           id: 0,
-          sinceId: 1409236251304210399
+          sinceId: 1409236251304210400
         })
       })
     }
@@ -40,22 +40,24 @@ function run() {
       tweets = tweets.filter(tweet => tweet.id > state[0].sinceId)
 
       for (let tweet of tweets) {
-        let originalTweet = await getTweet(tweet.in_reply_to_status_id_str)
-        let message = getMostRelevantAnswer(originalTweet.text)
+        let message = getMostRelevantAnswer(tweet.text)
+        let replyTo = tweet.user.screen_name
         if (message) {
-          let replyTo = tweet.user.screen_name
           let theUserWhoHasToLearn = tweet.in_reply_to_screen_name
 
-          console.log(message, replyTo, theUserWhoHasToLearn)
-          // await sendTweet(tweet.id, message, replyTo, theUserWhoHasToLearn)
+          await sendTweet(tweet.id, message, replyTo, theUserWhoHasToLearn)
         } else {
-          // TODO define an appropriate message when no fudbusting article has been found
-          console.log('No answer found')
+          message = [
+            'Beep boop, I am @btcfudbuster 🤖',
+            'If you mention me and a topic hashtag that I know, I will reply with a relevant article.',
+            'Topics: #energy #china #PoS #bans #privacy'
+          ].join('\n')
+          await sendTweet(tweet.id, message, replyTo, theUserWhoHasToLearn)
         }
       }
 
       if (tweets.length === 0) {
-        console.log('No new mentions')
+        console.log(new Date(), 'No new mentions')
         return
       }
 

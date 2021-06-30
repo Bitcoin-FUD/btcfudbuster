@@ -11,7 +11,6 @@ import { getMostRelevantAnswer } from './answerUtils.mjs'
       required: true
     }])
     let query = result.query
-    console.log('Your query: ' + query)
 
     let bestAnswer = getMostRelevantAnswer(query)
     if (bestAnswer) {
@@ -21,4 +20,5 @@ import { getMostRelevantAnswer } from './answerUtils.mjs'
       console.log('No results')
     }
   }
+
 })()
