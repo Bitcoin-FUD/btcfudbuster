@@ -18,6 +18,7 @@ export const random = arr => {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 export const getMostRelevantAnswer = query => {
+  if (!query) return null
   let answers = allMaterial
     .map(material => {
       material.hits = query
