@@ -37,7 +37,7 @@ export const sendTweet = (replyTo, message, user1, user2) => {
     console.log('Reply to', replyTo)
 
     // twitter requires to tag user in reply to, we also tag the user that is meant to read the fud busting
-    if (user2 === user1) {
+    if (user2 === user1 || !user2) {
       message += ` @${user1}`
     } else {
       message += ` @${user2} and @${user1}`
