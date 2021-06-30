@@ -3,7 +3,11 @@ Twitter Bot to Bust Bitcoin FUD
 
 # Dependencies
 
-Install nodeJS from https://nodejs.org/en/
+If not installed, install nodeJS from https://nodejs.org/en/
+
+Then execute to install required packages
+
+`npm install`
 # Installation
 1. Copy `config.dist.mjs` to `config.mjs`
 2. Fill Twitter API credentials
