@@ -21,7 +21,7 @@ Realm.open({
       realm.write(() => {
         realm.create('State', {
           id: 0,
-          sinceId: 1409236251304210400
+          sinceId: '1410276279140634629'
         })
       })
     }
@@ -37,7 +37,10 @@ Realm.open({
 function run() {
   getLatestTweets(state[0].sinceId)
     .then(async tweets => {
-      tweets = tweets.filter(tweet => tweet.id > state[0].sinceId)
+      if (tweets.length === 0) {
+        console.log(new Date(), 'No new mentions')
+        return
+      }
 
       for (let tweet of tweets) {
         let message = getMostRelevantAnswer(tweet.text)
@@ -45,20 +48,15 @@ function run() {
         if (message) {
           let theUserWhoHasToLearn = tweet.in_reply_to_screen_name
 
-          await sendTweet(tweet.id, message, replyTo, theUserWhoHasToLearn)
+          await sendTweet(tweet.id_str, message, replyTo, theUserWhoHasToLearn)
         } else {
           message = [
             'Beep boop, I am @btcfudbuster 🤖',
-            'If you mention me and a topic hashtag that I know, I will reply with a relevant article.',
+            'Mention me like this: "@btcfudbuster help" and a topic hashtag that I know, I will reply with a relevant article.',
             'Topics: #energy #china #PoS #bans #privacy'
           ].join('\n')
-          await sendTweet(tweet.id, message, replyTo, theUserWhoHasToLearn)
+          await sendTweet(tweet.id_str, message, replyTo)
         }
-      }
-
-      if (tweets.length === 0) {
-        console.log(new Date(), 'No new mentions')
-        return
       }
 
       realm.write(() => {

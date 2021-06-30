@@ -5,7 +5,7 @@ const client = new Twitter(config.twitterAPI)
 
 export const getTweet = id => {
   return new Promise(resolve => {
-    console.log('Get tweet', id)
+    console.log(new Date(), 'Get tweet', id)
     client.get('statuses/show.json', {
       id: id
     }, (error, tweet, response) => {
@@ -17,12 +17,31 @@ export const getTweet = id => {
 
 export const getLatestTweets = since_id => {
   return new Promise(resolve => {
-    console.log('Get latest mentions')
+    console.log(new Date(), `Get latest mentions since ${since_id}`)
     client.get('statuses/mentions_timeline.json', {
       since_id
     }, (error, tweets, response) => {
       // TODO handle error cases
-      resolve(tweets)
+      if (tweets?.length > 0) {
+        tweets = tweets
+          .filter(tweet => tweet.id_str > since_id) // failsafe
+          .filter(tweet => /@btcfudbuster help/.test(tweet.text)) // trigger word
+          // .filter(tweet => {
+          // this does not work quite as expected, see this message that shouldn't have been posted becaus ethe bot was actually not tagged
+          // https://twitter.com/btcfudbuster/status/1410278932562186241
+          //   // twitter API always auto populates @btcfudbuster even for simple replies
+          //   // if the bot is mentioned more than once, we can safely assume that the user wanted to follow up on sth.
+          //   if (tweet.text.match(/@btcfudbuster/g)?.length > 1) {
+          //     return true
+          //   }
+
+          //   // else check if tweet is not from bot and in direct reply to btcfudbuster but mentions it
+          //   return tweet.in_reply_to_screen_name !== 'btcfudbuster'
+          //     && tweet.user.screen_name !== 'btcfudbuster'
+          //     && /@btcfudbuster/.test(tweet.text)
+          // })
+      }
+      resolve(tweets || [])
     })
   })
 }
@@ -34,7 +53,7 @@ export const getLatestTweets = since_id => {
  */
 export const sendTweet = (replyTo, message, user1, user2) => {
   return new Promise(resolve => {
-    console.log('Reply to', replyTo)
+    console.log(new Date(), 'Reply to', replyTo, `message: ${message}`)
 
     // twitter requires to tag user in reply to, we also tag the user that is meant to read the fud busting
     if (user2 === user1 || !user2) {
@@ -44,10 +63,10 @@ export const sendTweet = (replyTo, message, user1, user2) => {
     }
     client.post('statuses/update', {
       status: message,
-      in_reply_to_status_id: tweet.id
+      in_reply_to_status_id: replyTo
     }, (error, tweet, response) => {
       if (error) {
-        console.log(error)
+        console.log(new Date(), error)
       }
       resolve()
     })
