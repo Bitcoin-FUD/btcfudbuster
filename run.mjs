@@ -52,7 +52,7 @@ function run() {
         } else {
           message = [
             'Beep boop, I am @btcfudbuster 🤖',
-            'Mention me like this: "@btcfudbuster help" and a topic hashtag that I know, I will reply with a relevant article.',
+            'Mention me like this: "@btcfudbuster debunk" and a topic hashtag that I know, I will reply with a relevant article.',
             'Topics: #energy #china #PoS #bans #privacy'
           ].join('\n')
           await sendTweet(tweet.id_str, message, replyTo)
