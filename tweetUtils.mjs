@@ -26,7 +26,7 @@ export const getLatestTweets = since_id => {
         tweets = tweets
           .filter(tweet => tweet.id_str > since_id) // failsafe
           .filter(tweet => tweet.user.screen_name !== 'btcfudbuster') // prevent answering on own tweets
-          .filter(tweet => /@btcfudbuster/.test(tweet.text) && /(help|debunk)/.test(tweet.text)) // trigger word
+          .filter(tweet => /@btcfudbuster/.test(tweet.text) && /(help|debunk|answer)/.test(tweet.text)) // trigger word
           // .filter(tweet => {
           // this does not work quite as expected, see this message that shouldn't have been posted becaus ethe bot was actually not tagged
           // https://twitter.com/btcfudbuster/status/1410278932562186241
