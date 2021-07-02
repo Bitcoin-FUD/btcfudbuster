@@ -51,8 +51,8 @@ function run() {
           await sendTweet(tweet.id_str, message, replyTo, theUserWhoHasToLearn)
         } else {
           message = [
-            'Beep boop, I am @btcfudbuster 🤖',
-            'Mention me like this: "@btcfudbuster answer" and a topic hashtag that I know, I will reply with a relevant article.',
+            'Beep boop, I am @fud_bot 🤖',
+            'Mention me like this: "@fud_bot answer" and a topic hashtag that I know, I will reply with a relevant article.',
             'Topics: #energy #china #PoS #bans #privacy'
           ].join('\n')
           await sendTweet(tweet.id_str, message, replyTo)
