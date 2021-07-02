@@ -7,6 +7,10 @@ const __dirname = path.resolve()
 const allMaterial = glob.sync(__dirname + '/material/**/*.toml')
   .map(path => fs.readFileSync(path, { encoding: 'utf-8'}))
   .map(file => toml.parse(file))
+  .map(material => {
+    material.tags = material.tags.replace(/\s/g, '').split(',')
+    return material
+  })
 
 /**
  * @description Method to get random element from array
@@ -24,7 +28,7 @@ export const getMostRelevantAnswer = query => {
       material.hits = query
         .split(' ')
         .map(keyword => ({
-          keyword: keyword.toLowerCase().replace(/[^a-z 0-9%]/g, ''),
+          keyword: keyword.toLowerCase().replace(/[^a-z0-9%]/g, ''),
           weight: keyword.indexOf('#') === 0 ? 5 : 1 // hashtags count more
         }))
         .filter(keyword => material.tags.indexOf(keyword.keyword.toLowerCase()) !== -1)
