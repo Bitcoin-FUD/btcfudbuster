@@ -4,7 +4,7 @@ import glob from 'glob'
 import path from 'path'
 const __dirname = path.resolve()
 
-const allMaterial = glob.sync(__dirname + '/material/**/*.toml')
+const allMaterial = glob.sync(path.join(__dirname, '/material/**/*.toml'))
   .map(path => fs.readFileSync(path, { encoding: 'utf-8'}))
   .map(file => toml.parse(file))
   .map(material => {
