@@ -27,12 +27,10 @@ export const getMostRelevantAnswer = query => {
     .map(material => {
       material.hits = query
         .split(' ')
-        .map(keyword => ({
-          keyword: keyword.toLowerCase().replace(/[^a-z0-9%]/g, ''),
-          weight: keyword.indexOf('#') === 0 ? 5 : 1 // hashtags count more
-        }))
-        .filter(keyword => material.tags.indexOf(keyword.keyword.toLowerCase()) !== -1)
-        .reduce((sum, keyword) => sum + keyword.weight, 0)
+        .filter(keyword => keyword.indexOf('#') === 0)
+        .map(keyword => keyword.toLowerCase().replace(/[^a-z0-9]/g, ''))
+        .filter(keyword => material.tags.indexOf(keyword.toLowerCase()) !== -1)
+        .length
 
       return material
     })
