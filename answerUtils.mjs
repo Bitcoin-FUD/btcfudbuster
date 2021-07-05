@@ -4,9 +4,13 @@ import glob from 'glob'
 import path from 'path'
 const __dirname = path.resolve()
 
-const allMaterial = glob.sync(__dirname + '/material/**/*.toml')
+const allMaterial = glob.sync(path.join(__dirname, '/material/**/*.toml'))
   .map(path => fs.readFileSync(path, { encoding: 'utf-8'}))
   .map(file => toml.parse(file))
+  .map(material => {
+    material.tags = material.tags.replace(/\s/g, '').split(',')
+    return material
+  })
 
 /**
  * @description Method to get random element from array
@@ -23,12 +27,10 @@ export const getMostRelevantAnswer = query => {
     .map(material => {
       material.hits = query
         .split(' ')
-        .map(keyword => ({
-          keyword: keyword.toLowerCase().replace(/[^a-z 0-9%]/g, ''),
-          weight: keyword.indexOf('#') === 0 ? 5 : 1 // hashtags count more
-        }))
-        .filter(keyword => material.tags.indexOf(keyword.keyword.toLowerCase()) !== -1)
-        .reduce((sum, keyword) => sum + keyword.weight, 0)
+        .filter(keyword => keyword.indexOf('#') === 0)
+        .map(keyword => keyword.toLowerCase().replace(/[^a-z0-9]/g, ''))
+        .filter(keyword => material.tags.indexOf(keyword.toLowerCase()) !== -1)
+        .length
 
       return material
     })
